@@ -18,7 +18,7 @@ const getUsers = (req, res) => {
       );
       res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "Error from getUsers: " + err.message });
+        .send({ message: `Error from getUsers: ${err.message}` });
     });
 };
 
@@ -35,11 +35,11 @@ const createUser = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: "Error from createUser: " + err.message });
+          .send({ message: `Error from createUser: ${err.message}` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from createUser: " + err.message });
+          .send({ message: `Error from createUser: ${err.message}` });
       }
     });
 };
@@ -49,11 +49,6 @@ const getUser = (req, res) => {
   User.findById(userId)
     .orFail()
     .then((user) => {
-      if (!user) {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: "Error from getUser : " + "User not found" });
-      }
       res.status(OK).send(user);
     })
     .catch((err) => {
@@ -63,15 +58,15 @@ const getUser = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Error from getUser: " + err.message });
+          .send({ message: `Error from getUser: ${err.message}` });
       } else if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: "Error from getUser: " + err.message });
+          .send({ message: `Error from getUser: ${err.message}` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from getUser: " + err.message });
+          .send({ message: `Error from getUser: ${err.message}` });
       }
     });
 };

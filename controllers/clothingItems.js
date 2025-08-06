@@ -18,7 +18,7 @@ const getClothingItems = (req, res) => {
       );
       res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "Error from getClothingItems: " + err.message });
+        .send({ message: `Error from getClothingItems: ${err.message}` });
     });
 };
 const createClothingItem = (req, res) => {
@@ -34,11 +34,11 @@ const createClothingItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: "Error from createClothingItem: " + err.message });
+          .send({ message: `Error from createClothingItem: ${err.message}` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from createClothingItem: " + err.message });
+          .send({ message: `Error from createClothingItem: ${err.message}` });
       }
     });
 };
@@ -57,15 +57,15 @@ const deleteClothingItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Error from deleteClothingItem: " + err.message });
+          .send({ message: `Error from deleteClothingItem: ${err.message}` });
       } else if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: "Error from deleteClothingItem: " + err.message });
+          .send({ message: `Error from deleteClothingItem: ${err.message}` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from deleteClothingItem: " + err.message });
+          .send({ message: `Error from deleteClothingItem: ${err.message}` });
       }
     });
 };
@@ -89,15 +89,15 @@ const likeClothingItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Error from likeClothingItem: " + err.message });
+          .send({ message: `Error from likeClothingItem: ${err.message}` });
       } else if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: "Error from likeClothingItem: " + err.message });
+          .send({ message: `Error from likeClothingItem: ${err.message}` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from likeClothingItem: " + err.message });
+          .send({ message: `Error from likeClothingItem: ${err.message}` });
       }
     });
 };
@@ -121,15 +121,15 @@ const unlikeClothingItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Error from unlikeClothingItem: " + err.message });
+          .send({ message: `Error from unlikeClothingItem: ${err.message}` });
       } else if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST)
-          .send({ message: "Error from unlikeClothingItem: " + err.message });
+          .send({ message: `Error from unlikeClothingItem: ${err.message}` });
       } else {
         return res
           .status(INTERNAL_SERVER_ERROR)
-          .send({ message: "Error from unlikeClothingItem: " + err.message });
+          .send({ message: `Error from unlikeClothingItem: ${err.message}` });
       }
     });
 };
