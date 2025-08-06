@@ -16,9 +16,9 @@ const getUsers = (req, res) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
-      res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: `Error from getUsers: ${err.message}` });
+      res.status(INTERNAL_SERVER_ERROR).send({
+        message: `Error from getUsers: An error has occurred on the server.`,
+      });
     });
 };
 
@@ -37,9 +37,9 @@ const createUser = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `Error from createUser: ${err.message}` });
       } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `Error from createUser: ${err.message}` });
+        return res.status(INTERNAL_SERVER_ERROR).send({
+          message: `Error from createUser: An error has occurred on the server.`,
+        });
       }
     });
 };
@@ -64,9 +64,9 @@ const getUser = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `Error from getUser: ${err.message}` });
       } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `Error from getUser: ${err.message}` });
+        return res.status(INTERNAL_SERVER_ERROR).send({
+          message: `Error from getUser: An error has occurred on the server.`,
+        });
       }
     });
 };

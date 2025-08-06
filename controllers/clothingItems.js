@@ -18,7 +18,9 @@ const getClothingItems = (req, res) => {
       );
       res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: `Error from getClothingItems: ${err.message}` });
+        .send({
+          message: `Error from getClothingItems: An error has occurred on the server.`,
+        });
     });
 };
 const createClothingItem = (req, res) => {
@@ -36,9 +38,9 @@ const createClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `Error from createClothingItem: ${err.message}` });
       } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `Error from createClothingItem: ${err.message}` });
+        return res.status(INTERNAL_SERVER_ERROR).send({
+          message: `Error from createClothingItem: An error has occurred on the server.`,
+        });
       }
     });
 };
@@ -63,9 +65,9 @@ const deleteClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `Error from deleteClothingItem: ${err.message}` });
       } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `Error from deleteClothingItem: ${err.message}` });
+        return res.status(INTERNAL_SERVER_ERROR).send({
+          message: `Error from deleteClothingItem: An error has occurred on the server.}`,
+        });
       }
     });
 };
@@ -95,9 +97,9 @@ const likeClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `Error from likeClothingItem: ${err.message}` });
       } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `Error from likeClothingItem: ${err.message}` });
+        return res.status(INTERNAL_SERVER_ERROR).send({
+          message: `Error from likeClothingItem: An error has occurred on the server.`,
+        });
       }
     });
 };
@@ -127,9 +129,9 @@ const unlikeClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: `Error from unlikeClothingItem: ${err.message}` });
       } else {
-        return res
-          .status(INTERNAL_SERVER_ERROR)
-          .send({ message: `Error from unlikeClothingItem: ${err.message}` });
+        return res.status(INTERNAL_SERVER_ERROR).send({
+          message: `Error from unlikeClothingItem: An error has occurred on the server.`,
+        });
       }
     });
 };
