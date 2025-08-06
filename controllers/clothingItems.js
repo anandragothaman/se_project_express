@@ -10,17 +10,15 @@ const {
 const getClothingItems = (req, res) => {
   ClothingItem.find({})
     .then((clothingItems) => {
-      res.status(OK).send(clothingItems);
+      res.send(clothingItems);
     })
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
-      res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({
-          message: `Error from getClothingItems: An error has occurred on the server.`,
-        });
+      res.status(INTERNAL_SERVER_ERROR).send({
+        message: `An error has occurred on the server.`,
+      });
     });
 };
 const createClothingItem = (req, res) => {
@@ -34,14 +32,11 @@ const createClothingItem = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `Error from createClothingItem: ${err.message}` });
-      } else {
-        return res.status(INTERNAL_SERVER_ERROR).send({
-          message: `Error from createClothingItem: An error has occurred on the server.`,
-        });
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
       }
+      return res.status(INTERNAL_SERVER_ERROR).send({
+        message: `An error has occurred on the server.`,
+      });
     });
 };
 const deleteClothingItem = (req, res) => {
@@ -57,18 +52,14 @@ const deleteClothingItem = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: `Error from deleteClothingItem: ${err.message}` });
-      } else if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `Error from deleteClothingItem: ${err.message}` });
-      } else {
-        return res.status(INTERNAL_SERVER_ERROR).send({
-          message: `Error from deleteClothingItem: An error has occurred on the server.}`,
-        });
+        return res.status(NOT_FOUND).send({ message: "Data not found" });
       }
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({
+        message: `An error has occurred on the server.}`,
+      });
     });
 };
 
@@ -89,18 +80,14 @@ const likeClothingItem = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: `Error from likeClothingItem: ${err.message}` });
-      } else if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `Error from likeClothingItem: ${err.message}` });
-      } else {
-        return res.status(INTERNAL_SERVER_ERROR).send({
-          message: `Error from likeClothingItem: An error has occurred on the server.`,
-        });
+        return res.status(NOT_FOUND).send({ message: "Data not found" });
       }
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({
+        message: "An error has occurred on the server.",
+      });
     });
 };
 
@@ -121,18 +108,14 @@ const unlikeClothingItem = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: `Error from unlikeClothingItem: ${err.message}` });
-      } else if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `Error from unlikeClothingItem: ${err.message}` });
-      } else {
-        return res.status(INTERNAL_SERVER_ERROR).send({
-          message: `Error from unlikeClothingItem: An error has occurred on the server.`,
-        });
+        return res.status(NOT_FOUND).send({ message: "Data not found" });
       }
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({
+        message: `An error has occurred on the server.`,
+      });
     });
 };
 

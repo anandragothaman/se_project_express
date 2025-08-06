@@ -17,7 +17,7 @@ const getUsers = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       res.status(INTERNAL_SERVER_ERROR).send({
-        message: `Error from getUsers: An error has occurred on the server.`,
+        message: `An error has occurred on the server.`,
       });
     });
 };
@@ -33,14 +33,11 @@ const createUser = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `Error from createUser: ${err.message}` });
-      } else {
-        return res.status(INTERNAL_SERVER_ERROR).send({
-          message: `Error from createUser: An error has occurred on the server.`,
-        });
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
       }
+      return res.status(INTERNAL_SERVER_ERROR).send({
+        message: `An error has occurred on the server.`,
+      });
     });
 };
 
@@ -56,18 +53,14 @@ const getUser = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: `Error from getUser: ${err.message}` });
-      } else if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: `Error from getUser: ${err.message}` });
-      } else {
-        return res.status(INTERNAL_SERVER_ERROR).send({
-          message: `Error from getUser: An error has occurred on the server.`,
-        });
+        return res.status(NOT_FOUND).send({ message: "Data not found" });
       }
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({
+        message: `An error has occurred on the server.`,
+      });
     });
 };
 module.exports = { getUsers, createUser, getUser };
