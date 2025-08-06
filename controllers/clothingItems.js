@@ -3,8 +3,8 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   OK,
-  NO_CONTENT,
   INTERNAL_SERVER_ERROR,
+  CREATED,
 } = require("../utils/errors");
 
 const getClothingItems = (req, res) => {
@@ -48,9 +48,7 @@ const deleteClothingItem = (req, res) => {
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then(() => {
-      res
-        .status(NO_CONTENT)
-        .send({ message: "Clothing item deleted successfully" });
+      res.status(OK).send({});
     })
     .catch((err) => {
       console.error(
