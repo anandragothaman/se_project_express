@@ -3,6 +3,7 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   OK,
+  FORBIDDEN,
   INTERNAL_SERVER_ERROR,
   CREATED,
 } = require("../utils/errors");
@@ -41,12 +42,21 @@ const createClothingItem = (req, res) => {
 };
 const deleteClothingItem = (req, res) => {
   const { itemId } = req.params;
-
-  ClothingItem.findByIdAndDelete(itemId)
+  if (!itemId) {
+    return res.status(BAD_REQUEST).send({ message: "Item ID is required" });
+  }
+  return ClothingItem.findById(itemId)
     .orFail()
-    .then(() => {
-      res.status(OK).send({});
+    .then((clothingItem) => {
+      if (clothingItem.owner.toString() !== req.user._id) {
+        return res
+          .status(FORBIDDEN)
+          .send({ message: "You do not have permission to delete this item" });
+      }
+      return clothingItem;
     })
+    .then(() => ClothingItem.findByIdAndDelete(itemId))
+    .then(() => res.status(OK).send({}))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
@@ -72,9 +82,7 @@ const likeClothingItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((clothingItem) => {
-      res.status(OK).send(clothingItem);
-    })
+    .then((clothingItem) => res.status(OK).send(clothingItem))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
@@ -100,9 +108,7 @@ const unlikeClothingItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((clothingItem) => {
-      res.status(OK).send(clothingItem);
-    })
+    .then((clothingItem) => res.status(OK).send(clothingItem))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`

@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const { PORT = 3001 } = process.env;
 const mongoose = require("mongoose");
+const cors = require("cors");
 const mainRouter = require("./routes/index");
 
 mongoose
@@ -11,13 +12,8 @@ mongoose
     console.log("Connected to MongoDB");
   })
   .catch(console.error);
+app.use(cors());
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: "68936679add22407094954a8",
-  };
-  next();
-});
 app.use("/", mainRouter);
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
