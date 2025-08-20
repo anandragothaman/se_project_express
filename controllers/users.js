@@ -6,26 +6,12 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   CONFLICT,
+  UNAUTHORIZED,
   OK,
   CREATED,
   INTERNAL_SERVER_ERROR,
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {
-      res.status(OK).send(users);
-    })
-    .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
-      res.status(INTERNAL_SERVER_ERROR).send({
-        message: `An error has occurred on the server.`,
-      });
-    });
-};
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -126,7 +112,9 @@ const login = (req, res) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "UnauthorizedError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid credentials" });
+        return res
+          .status(UNAUTHORIZED)
+          .send({ message: "Invalid credentials" });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({
         message: `An error has occurred on the server.`,
@@ -177,4 +165,4 @@ const updateProfile = (req, res) => {
       });
     });
 };
-module.exports = { getUsers, createUser, getCurrentUser, login, updateProfile };
+module.exports = { createUser, getCurrentUser, login, updateProfile };
