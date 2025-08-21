@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validator = require("validator");
 const User = require("../models/user");
 const {
   BAD_REQUEST,
@@ -15,33 +14,6 @@ const { JWT_SECRET } = require("../utils/config");
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  if (!name || !avatar || !email || !password) {
-    return res.status(BAD_REQUEST).send({ message: "All fields are required" });
-  }
-  if (
-    typeof name !== "string" ||
-    typeof avatar !== "string" ||
-    typeof email !== "string" ||
-    typeof password !== "string"
-  ) {
-    return res.status(BAD_REQUEST).send({ message: "Invalid data type" });
-  }
-  if (name.length < 2 || name.length > 30) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Name must be between 2 and 30 characters" });
-  }
-  if (!validator.isURL(avatar)) {
-    return res.status(BAD_REQUEST).send({ message: "Invalid avatar URL" });
-  }
-  if (!validator.isEmail(email)) {
-    return res.status(BAD_REQUEST).send({ message: "Invalid email format" });
-  }
-  if (password.length < 8) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Password must be at least 8 characters long" });
-  }
   return bcrypt
     .hash(password, 10)
     .then((hash) =>
@@ -95,11 +67,6 @@ const getCurrentUser = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Email and password are required" });
-  }
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -124,20 +91,6 @@ const login = (req, res) => {
 
 const updateProfile = (req, res) => {
   const { name, avatar } = req.body;
-  if (!name || !avatar) {
-    return res.status(BAD_REQUEST).send({ message: "All fields are required" });
-  }
-  if (typeof name !== "string" || typeof avatar !== "string") {
-    return res.status(BAD_REQUEST).send({ message: "Invalid data type" });
-  }
-  if (name.length < 2 || name.length > 30) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Name must be between 2 and 30 characters" });
-  }
-  if (!validator.isURL(avatar)) {
-    return res.status(BAD_REQUEST).send({ message: "Invalid avatar URL" });
-  }
   return User.findByIdAndUpdate(
     req.user._id,
     { name, avatar },
