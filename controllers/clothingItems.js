@@ -1,12 +1,7 @@
 const ClothingItem = require("../models/clothingItem");
-const {
-  BAD_REQUEST,
-  NOT_FOUND,
-  OK,
-  FORBIDDEN,
-  INTERNAL_SERVER_ERROR,
-  CREATED,
-} = require("../utils/errors");
+const { BAD_REQUEST, OK, FORBIDDEN, CREATED } = require("../utils/errors");
+const NotFoundError = require("../errors/not-found-error");
+const BadRequestError = require("../errors/bad-request-error");
 
 const getClothingItems = (req, res) => {
   ClothingItem.find({})
@@ -14,12 +9,7 @@ const getClothingItems = (req, res) => {
       res.send(clothingItems);
     })
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
-      res.status(INTERNAL_SERVER_ERROR).send({
-        message: `An error has occurred on the server.`,
-      });
+      next(err);
     });
 };
 const createClothingItem = (req, res) => {
@@ -29,21 +19,16 @@ const createClothingItem = (req, res) => {
       res.status(CREATED).send(clothingItem);
     })
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+        next(new BadRequestError("Invalid data"));
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({
-        message: `An error has occurred on the server.`,
-      });
+      next(err);
     });
 };
 const deleteClothingItem = (req, res) => {
   const { itemId } = req.params;
   if (!itemId) {
-    return res.status(BAD_REQUEST).send({ message: "Item ID is required" });
+    throw new NotFoundError("Item ID is required");
   }
   return ClothingItem.findById(itemId)
     .orFail()
@@ -58,18 +43,13 @@ const deleteClothingItem = (req, res) => {
     .then(() => ClothingItem.findByIdAndDelete(itemId))
     .then(() => res.status(OK).send({}))
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "Data not found" });
+        next(new NotFoundError("Data not found"));
       }
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+        next(new BadRequestError("Invalid data"));
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({
-        message: `An error has occurred on the server.`,
-      });
+      next(err);
     });
 };
 
@@ -84,18 +64,13 @@ const likeClothingItem = (req, res) => {
     .orFail()
     .then((clothingItem) => res.status(OK).send(clothingItem))
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "Data not found" });
+        next(new NotFoundError("Data not found"));
       }
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+        next(new BadRequestError("Invalid data"));
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({
-        message: "An error has occurred on the server.",
-      });
+      next(err);
     });
 };
 
@@ -110,18 +85,13 @@ const unlikeClothingItem = (req, res) => {
     .orFail()
     .then((clothingItem) => res.status(OK).send(clothingItem))
     .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "Data not found" });
+        next(new NotFoundError("Data not found"));
       }
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+        next(new BadRequestError("Invalid data"));
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({
-        message: `An error has occurred on the server.`,
-      });
+      next(err);
     });
 };
 
