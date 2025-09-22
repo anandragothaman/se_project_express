@@ -23,3 +23,12 @@ The back-end project is focused on creating a server for the WTWR application. I
 - Nodemon to hot reload
 - Postman to test the endpoints
 - Github actions
+
+## Projects domain name
+
+https://www.wtwr.aerwear.ro/
+https://api.wtwr.aerwear.ro/
+
+## Frontend Repo
+
+https://github.com/anandragothaman/se_project_react
