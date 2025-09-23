@@ -1,9 +1,10 @@
 const ClothingItem = require("../models/clothingItem");
-const { BAD_REQUEST, OK, FORBIDDEN, CREATED } = require("../utils/errors");
+const { OK, CREATED } = require("../utils/errors");
 const NotFoundError = require("../errors/not-found-error");
 const BadRequestError = require("../errors/bad-request-error");
+const ForbiddenError = require("../errors/forbidden-error");
 
-const getClothingItems = (req, res) => {
+const getClothingItems = (req, res, next) => {
   ClothingItem.find({})
     .then((clothingItems) => {
       res.send(clothingItems);
@@ -12,7 +13,7 @@ const getClothingItems = (req, res) => {
       next(err);
     });
 };
-const createClothingItem = (req, res) => {
+const createClothingItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((clothingItem) => {
@@ -25,7 +26,7 @@ const createClothingItem = (req, res) => {
       next(err);
     });
 };
-const deleteClothingItem = (req, res) => {
+const deleteClothingItem = (req, res, next) => {
   const { itemId } = req.params;
   if (!itemId) {
     throw new NotFoundError("Item ID is required");
@@ -34,9 +35,9 @@ const deleteClothingItem = (req, res) => {
     .orFail()
     .then((clothingItem) => {
       if (clothingItem.owner.toString() !== req.user._id) {
-        return res
-          .status(FORBIDDEN)
-          .send({ message: "You do not have permission to delete this item" });
+        return next(
+          new ForbiddenError("You do not have permission to delete this item")
+        );
       }
       return clothingItem;
     })
@@ -53,7 +54,7 @@ const deleteClothingItem = (req, res) => {
     });
 };
 
-const likeClothingItem = (req, res) => {
+const likeClothingItem = (req, res, next) => {
   const { itemId } = req.params;
 
   ClothingItem.findByIdAndUpdate(
@@ -74,7 +75,7 @@ const likeClothingItem = (req, res) => {
     });
 };
 
-const unlikeClothingItem = (req, res) => {
+const unlikeClothingItem = (req, res, next) => {
   const { itemId } = req.params;
 
   ClothingItem.findByIdAndUpdate(

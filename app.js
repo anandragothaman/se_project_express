@@ -1,17 +1,24 @@
 const express = require("express");
-const errorHandler = require("./middlewares/error-handler");
+
+const { errors } = require("celebrate");
+
 require("dotenv").config();
 
 const app = express();
 const { PORT = 3001 } = process.env;
 const mongoose = require("mongoose");
+
 const cors = require("cors");
+
 const helmet = require("helmet");
-const mainRouter = require("./routes/index");
-const { errors } = require("celebrate");
-const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 app.use(helmet());
+const errorHandler = require("./middlewares/error-handler");
+
+const mainRouter = require("./routes/index");
+
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+
 app.disable("x-powered-by");
 
 mongoose
